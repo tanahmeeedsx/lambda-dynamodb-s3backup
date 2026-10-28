@@ -74,7 +74,6 @@ flowchart LR
 ```text
 lambda-dynamodb-s3backup/
 ├── README.md
-├── .gitignore
 ├── Screenshots/
 │   ├── 01-dynamodb-table-creation.png
 │   ├── 02-s3-bucket-creation.png
@@ -97,20 +96,22 @@ lambda-dynamodb-s3backup/
 │   └── backup_users/
 │       └── lambda_function.py
 └── lambda_zips/
-    ├── lambda-import-users.zip
-    └── lambda-backup-to-s3.zip
+    ├── lambda-import-users/
+    │   └── lambda_function.py
+    └── lambda-backup-to-s3/
+        └── lambda_function.py
 ```
 
 ## Lambda Functions
 
-### 1. Import users — `import_users`
+### 1. Import users — `lambda_src/import_users/lambda_function.py`
 
 - Retrieves sample user records from JSONPlaceholder.
 - Writes items to the `jsonplaceholder-users` DynamoDB table.
 - Uses DynamoDB `PutItem` operations.
 - Writes execution details and errors to CloudWatch Logs.
 
-### 2. Export backup — `backup_users`
+### 2. Export backup — `lambda_src/backup_users/lambda_function.py`
 
 - Reads records from the DynamoDB table.
 - Serializes the returned items as JSON.
@@ -151,15 +152,15 @@ Follow this sequence when reproducing the lab in your own AWS account.
 2. **Create a private S3 bucket** in the selected Region. S3 bucket names must be globally unique.
 3. **Create IAM execution roles** for the import and backup Lambda functions.
 4. **Review and attach policies** from `iam_policies/`, restricting resources to the intended table and bucket.
-5. **Deploy the import Lambda** using `lambda_zips/lambda-import-users.zip`.
+5. **Package and deploy the import Lambda.** The source is in `lambda_src/import_users/lambda_function.py`. Create a deployment ZIP locally when uploading the function to AWS; generated ZIP files are not stored in this repository.
 6. **Run an import test** and verify the function response and DynamoDB items.
-7. **Deploy the backup Lambda** using `lambda_zips/lambda-backup-to-s3.zip`.
+7. **Package and deploy the backup Lambda.** The source is in `lambda_src/backup_users/lambda_function.py`. Create a deployment ZIP locally when uploading the function to AWS; generated ZIP files are not stored in this repository.
 8. **Run a backup test** and verify the JSON object exists in S3.
 9. **Configure EventBridge Scheduler** to invoke the backup function at the required interval. Check the target, invocation role, and enabled state.
 10. **Verify CloudWatch Logs and metrics** for both functions.
 11. **Confirm repeated backups** create separate objects with distinct timestamps, if the function is designed to do so.
 
-The ZIP archives are deployment artifacts. If you change the Python source, rebuild the corresponding ZIP before uploading it to Lambda.
+The `lambda_zips/` directories contain extracted copies of the Lambda handler files for reference, not ZIP archives. To deploy or update a function, create a ZIP package locally from the appropriate handler file, then upload that package to Lambda. Keep generated ZIP artifacts out of the repository if you prefer to track source code only.
 
 ## Screenshots and Implementation Evidence
 
