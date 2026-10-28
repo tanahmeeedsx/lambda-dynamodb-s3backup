@@ -68,7 +68,6 @@ flowchart LR
 | ![Amazon CloudWatch](https://img.shields.io/badge/-CloudWatch-FF4F8B?logo=amazonaws&logoColor=white) | Provides logs, invocation metrics, and troubleshooting data |
 | ![AWS IAM](https://img.shields.io/badge/-IAM-232F3E?logo=amazonaws&logoColor=white) | Controls the permissions available to each Lambda function |
 | ![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white) | Implements the Lambda functions |
-| ![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=github&logoColor=white) | Stores source code and documentation |
 
 ## Repository Structure
 
